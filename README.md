@@ -19,7 +19,7 @@
 <p>2. Find latest release.</p>
 
 <p>3. Install .exe or install the zip.</p>
-<h3 align="center"> if you downloaded the zip make sure to open it with visual studio.</h2>
+<h4>If you downloaded the zip make sure to open it with visual studio.</h2>
   
   
 <h2>💻 Built with</h2>
