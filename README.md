@@ -6,10 +6,8 @@
 <p id="description">Personal/School project this project is a music player with simple functions attempting to be a better version of windows media player made in winform. All music can only be played locally.</p>
 
 <h2>🚀 Demo</h2>
-[https://github.com/rydbyte/Music-Player/releases/tag/v.1](https://github.com/rydbyte/Music-Player/releases/tag/v.1)
+<p><a href="https://github.com/rydbyte/Music-Player/releases/tag/v.1">Demo Music Player</a></p>
 
-  
-  
 <h2>🧐 Features</h2>
 
 <h2>🛠️ Installation Steps:</h2>
