@@ -30,135 +30,246 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            groupBox1 = new GroupBox();
+            songBox1 = new GroupBox();
+            searchBox = new ReaLTaiizor.Controls.ForeverTextBox();
+            scrollbarHider = new Panel();
+            songList = new ListBox();
+            systemBox = new GroupBox();
             panel1 = new Panel();
-            listBox1 = new ListBox();
-            groupBox2 = new GroupBox();
-            metroLabel2 = new ReaLTaiizor.Controls.MetroLabel();
-            metroLabel1 = new ReaLTaiizor.Controls.MetroLabel();
-            groupBox3 = new GroupBox();
+            lyricsBox = new TextBox();
+            timeLabel = new ReaLTaiizor.Controls.MetroLabel();
+            dateLabel = new ReaLTaiizor.Controls.MetroLabel();
+            controlBox = new GroupBox();
+            previousButton = new PictureBox();
+            skipButton = new PictureBox();
+            playButton = new PictureBox();
             metroProgressBar1 = new ReaLTaiizor.Controls.PoisonProgressBar();
             Artistt = new TextBox();
             Titlee = new TextBox();
-            pictureBox1 = new PictureBox();
+            artBox = new PictureBox();
             timer1 = new System.Windows.Forms.Timer(components);
-            groupBox1.SuspendLayout();
-            groupBox2.SuspendLayout();
-            groupBox3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            songBox1.SuspendLayout();
+            systemBox.SuspendLayout();
+            controlBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)previousButton).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)skipButton).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)playButton).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)artBox).BeginInit();
             SuspendLayout();
             // 
-            // groupBox1
+            // songBox1
             // 
-            groupBox1.AutoSize = true;
-            groupBox1.Controls.Add(panel1);
-            groupBox1.Controls.Add(listBox1);
-            groupBox1.Font = new Font("Castellar", 10.2F);
-            groupBox1.ForeColor = SystemColors.Control;
-            groupBox1.Location = new Point(12, 12);
-            groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(586, 645);
-            groupBox1.TabIndex = 3;
-            groupBox1.TabStop = false;
-            groupBox1.Text = "Songs";
+            songBox1.AutoSize = true;
+            songBox1.Controls.Add(searchBox);
+            songBox1.Controls.Add(scrollbarHider);
+            songBox1.Controls.Add(songList);
+            songBox1.Font = new Font("Castellar", 10.2F);
+            songBox1.ForeColor = SystemColors.Control;
+            songBox1.Location = new Point(12, 12);
+            songBox1.Name = "songBox1";
+            songBox1.Size = new Size(586, 645);
+            songBox1.TabIndex = 3;
+            songBox1.TabStop = false;
+            songBox1.Text = "Songs";
+            // 
+            // searchBox
+            // 
+            searchBox.BackColor = Color.Transparent;
+            searchBox.BaseColor = SystemColors.ActiveCaptionText;
+            searchBox.BorderColor = SystemColors.Control;
+            searchBox.FocusOnHover = false;
+            searchBox.Font = new Font("Castellar", 7.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            searchBox.ForeColor = SystemColors.Control;
+            searchBox.Location = new Point(434, 16);
+            searchBox.MaxLength = 32767;
+            searchBox.Multiline = false;
+            searchBox.Name = "searchBox";
+            searchBox.ReadOnly = false;
+            searchBox.Size = new Size(141, 27);
+            searchBox.TabIndex = 2;
+            searchBox.Text = "Search";
+            searchBox.TextAlign = HorizontalAlignment.Left;
+            searchBox.UseSystemPasswordChar = false;
+            searchBox.TextChanged += searchBox_TextChanged;
+            searchBox.Click += searchBox_Click;
+            searchBox.Enter += searchBox_Click;
+            searchBox.GotFocus += searchBox_Click;
+            // 
+            // scrollbarHider
+            // 
+            scrollbarHider.BackColor = Color.Transparent;
+            scrollbarHider.Location = new Point(553, 49);
+            scrollbarHider.Name = "scrollbarHider";
+            scrollbarHider.Padding = new Padding(0, 0, 20, 0);
+            scrollbarHider.Size = new Size(22, 569);
+            scrollbarHider.TabIndex = 1;
+            // 
+            // songList
+            // 
+            songList.BackColor = SystemColors.InactiveCaptionText;
+            songList.BorderStyle = BorderStyle.None;
+            songList.DrawMode = DrawMode.OwnerDrawFixed;
+            songList.Font = new Font("Castellar", 10.2F);
+            songList.ForeColor = SystemColors.Control;
+            songList.FormattingEnabled = true;
+            songList.IntegralHeight = false;
+            songList.ItemHeight = 50;
+            songList.Location = new Point(12, 49);
+            songList.Name = "songList";
+            songList.Size = new Size(563, 569);
+            songList.TabIndex = 0;
+            songList.DrawItem += listBox1_DrawItem;
+            songList.SelectedIndexChanged += listBox1_SelectedIndexChanged_1;
+            // 
+            // systemBox
+            // 
+            systemBox.Controls.Add(panel1);
+            systemBox.Controls.Add(lyricsBox);
+            systemBox.Controls.Add(timeLabel);
+            systemBox.Controls.Add(dateLabel);
+            systemBox.Font = new Font("Castellar", 10.2F);
+            systemBox.ForeColor = SystemColors.Control;
+            systemBox.Location = new Point(12, 656);
+            systemBox.Name = "systemBox";
+            systemBox.Size = new Size(1900, 410);
+            systemBox.TabIndex = 4;
+            systemBox.TabStop = false;
+            systemBox.Text = "System";
             // 
             // panel1
             // 
             panel1.BackColor = Color.Transparent;
-            panel1.Location = new Point(532, 43);
+            panel1.Location = new Point(503, 27);
             panel1.Name = "panel1";
             panel1.Padding = new Padding(0, 0, 20, 0);
-            panel1.Size = new Size(43, 575);
-            panel1.TabIndex = 1;
+            panel1.Size = new Size(24, 367);
+            panel1.TabIndex = 3;
             // 
-            // listBox1
+            // lyricsBox
             // 
-            listBox1.BackColor = SystemColors.InactiveCaptionText;
-            listBox1.BorderStyle = BorderStyle.None;
-            listBox1.Font = new Font("Castellar", 10.2F);
-            listBox1.ForeColor = SystemColors.ActiveCaptionText;
-            listBox1.FormattingEnabled = true;
-            listBox1.IntegralHeight = false;
-            listBox1.Location = new Point(12, 43);
-            listBox1.Name = "listBox1";
-            listBox1.Size = new Size(563, 575);
-            listBox1.TabIndex = 0;
-            listBox1.SelectedIndexChanged += listBox1_SelectedIndexChanged_1;
+            lyricsBox.AcceptsReturn = true;
+            lyricsBox.AcceptsTab = true;
+            lyricsBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            lyricsBox.BackColor = SystemColors.ActiveCaptionText;
+            lyricsBox.BorderStyle = BorderStyle.None;
+            lyricsBox.Font = new Font("Castellar", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lyricsBox.ForeColor = SystemColors.Control;
+            lyricsBox.Location = new Point(85, 27);
+            lyricsBox.Multiline = true;
+            lyricsBox.Name = "lyricsBox";
+            lyricsBox.ReadOnly = true;
+            lyricsBox.ScrollBars = ScrollBars.Vertical;
+            lyricsBox.Size = new Size(442, 367);
+            lyricsBox.TabIndex = 2;
+            lyricsBox.Text = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+            lyricsBox.TextAlign = HorizontalAlignment.Center;
             // 
-            // groupBox2
+            // timeLabel
             // 
-            groupBox2.Controls.Add(metroLabel2);
-            groupBox2.Controls.Add(metroLabel1);
-            groupBox2.Font = new Font("Castellar", 10.2F);
-            groupBox2.ForeColor = SystemColors.Control;
-            groupBox2.Location = new Point(12, 656);
-            groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(1900, 410);
-            groupBox2.TabIndex = 4;
-            groupBox2.TabStop = false;
-            groupBox2.Text = "System";
+            timeLabel.Anchor = AnchorStyles.None;
+            timeLabel.Font = new Font("Castellar", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            timeLabel.ImageAlign = ContentAlignment.BottomRight;
+            timeLabel.IsDerivedStyle = true;
+            timeLabel.Location = new Point(1741, 352);
+            timeLabel.Name = "timeLabel";
+            timeLabel.RightToLeft = RightToLeft.No;
+            timeLabel.Size = new Size(159, 29);
+            timeLabel.Style = ReaLTaiizor.Enum.Metro.Style.Dark;
+            timeLabel.StyleManager = null;
+            timeLabel.TabIndex = 1;
+            timeLabel.Text = "14:45:01";
+            timeLabel.TextAlign = ContentAlignment.BottomRight;
+            timeLabel.ThemeAuthor = "Taiizor";
+            timeLabel.ThemeName = "MetroDark";
             // 
-            // metroLabel2
+            // dateLabel
             // 
-            metroLabel2.Anchor = AnchorStyles.None;
-            metroLabel2.Font = new Font("Castellar", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            metroLabel2.ImageAlign = ContentAlignment.BottomRight;
-            metroLabel2.IsDerivedStyle = true;
-            metroLabel2.Location = new Point(1741, 352);
-            metroLabel2.Name = "metroLabel2";
-            metroLabel2.RightToLeft = RightToLeft.No;
-            metroLabel2.Size = new Size(159, 29);
-            metroLabel2.Style = ReaLTaiizor.Enum.Metro.Style.Dark;
-            metroLabel2.StyleManager = null;
-            metroLabel2.TabIndex = 1;
-            metroLabel2.Text = "14:45:01";
-            metroLabel2.TextAlign = ContentAlignment.BottomRight;
-            metroLabel2.ThemeAuthor = "Taiizor";
-            metroLabel2.ThemeName = "MetroDark";
+            dateLabel.Anchor = AnchorStyles.None;
+            dateLabel.Font = new Font("Castellar", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            dateLabel.ImageAlign = ContentAlignment.MiddleRight;
+            dateLabel.IsDerivedStyle = true;
+            dateLabel.Location = new Point(1741, 381);
+            dateLabel.Name = "dateLabel";
+            dateLabel.Size = new Size(159, 29);
+            dateLabel.Style = ReaLTaiizor.Enum.Metro.Style.Dark;
+            dateLabel.StyleManager = null;
+            dateLabel.TabIndex = 0;
+            dateLabel.Text = "28/05/2026";
+            dateLabel.TextAlign = ContentAlignment.MiddleRight;
+            dateLabel.ThemeAuthor = "Taiizor";
+            dateLabel.ThemeName = "MetroDark";
             // 
-            // metroLabel1
+            // controlBox
             // 
-            metroLabel1.Anchor = AnchorStyles.None;
-            metroLabel1.Font = new Font("Castellar", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            metroLabel1.ImageAlign = ContentAlignment.MiddleRight;
-            metroLabel1.IsDerivedStyle = true;
-            metroLabel1.Location = new Point(1741, 381);
-            metroLabel1.Name = "metroLabel1";
-            metroLabel1.Size = new Size(159, 29);
-            metroLabel1.Style = ReaLTaiizor.Enum.Metro.Style.Dark;
-            metroLabel1.StyleManager = null;
-            metroLabel1.TabIndex = 0;
-            metroLabel1.Text = "28/05/2026";
-            metroLabel1.TextAlign = ContentAlignment.MiddleRight;
-            metroLabel1.ThemeAuthor = "Taiizor";
-            metroLabel1.ThemeName = "MetroDark";
+            controlBox.Controls.Add(previousButton);
+            controlBox.Controls.Add(skipButton);
+            controlBox.Controls.Add(playButton);
+            controlBox.Controls.Add(metroProgressBar1);
+            controlBox.Controls.Add(Artistt);
+            controlBox.Controls.Add(Titlee);
+            controlBox.Controls.Add(artBox);
+            controlBox.Font = new Font("Castellar", 10.2F);
+            controlBox.ForeColor = SystemColors.Control;
+            controlBox.Location = new Point(593, 12);
+            controlBox.Name = "controlBox";
+            controlBox.Size = new Size(1319, 645);
+            controlBox.TabIndex = 5;
+            controlBox.TabStop = false;
+            controlBox.Text = "Control";
             // 
-            // groupBox3
+            // previousButton
             // 
-            groupBox3.AutoSize = true;
-            groupBox3.Controls.Add(metroProgressBar1);
-            groupBox3.Controls.Add(Artistt);
-            groupBox3.Controls.Add(Titlee);
-            groupBox3.Controls.Add(pictureBox1);
-            groupBox3.Font = new Font("Castellar", 10.2F);
-            groupBox3.ForeColor = SystemColors.Control;
-            groupBox3.Location = new Point(593, 12);
-            groupBox3.Name = "groupBox3";
-            groupBox3.Size = new Size(1319, 645);
-            groupBox3.TabIndex = 5;
-            groupBox3.TabStop = false;
-            groupBox3.Text = "Control";
+            previousButton.BackgroundImageLayout = ImageLayout.Center;
+            previousButton.BorderStyle = BorderStyle.FixedSingle;
+            previousButton.Image = Properties.Resources.play;
+            previousButton.Location = new Point(548, 446);
+            previousButton.Name = "previousButton";
+            previousButton.Size = new Size(53, 53);
+            previousButton.SizeMode = PictureBoxSizeMode.StretchImage;
+            previousButton.TabIndex = 9;
+            previousButton.TabStop = false;
+            previousButton.Click += previousButton_Click;
+            // 
+            // skipButton
+            // 
+            skipButton.BackgroundImageLayout = ImageLayout.Center;
+            skipButton.BorderStyle = BorderStyle.FixedSingle;
+            skipButton.Image = Properties.Resources.play;
+            skipButton.Location = new Point(735, 446);
+            skipButton.Name = "skipButton";
+            skipButton.Size = new Size(53, 53);
+            skipButton.SizeMode = PictureBoxSizeMode.StretchImage;
+            skipButton.TabIndex = 8;
+            skipButton.TabStop = false;
+            skipButton.Click += skipButton_Click;
+            // 
+            // playButton
+            // 
+            playButton.BackgroundImageLayout = ImageLayout.Center;
+            playButton.BorderStyle = BorderStyle.FixedSingle;
+            playButton.Image = Properties.Resources.play;
+            playButton.Location = new Point(640, 446);
+            playButton.Name = "playButton";
+            playButton.Size = new Size(53, 53);
+            playButton.SizeMode = PictureBoxSizeMode.StretchImage;
+            playButton.TabIndex = 7;
+            playButton.TabStop = false;
+            playButton.Click += playButton_Click;
             // 
             // metroProgressBar1
             // 
-            metroProgressBar1.ForeColor = Color.IndianRed;
-            metroProgressBar1.Location = new Point(11, 508);
+            metroProgressBar1.FontWeight = ReaLTaiizor.Extension.Poison.PoisonProgressBarWeight.Bold;
+            metroProgressBar1.ForeColor = SystemColors.Control;
+            metroProgressBar1.HideProgressText = false;
+            metroProgressBar1.Location = new Point(100, 505);
             metroProgressBar1.MarqueeAnimationSpeed = 1000;
             metroProgressBar1.Name = "metroProgressBar1";
             metroProgressBar1.ProgressBarMarqueeWidth = 434;
-            metroProgressBar1.Size = new Size(1302, 10);
+            metroProgressBar1.Size = new Size(1100, 20);
             metroProgressBar1.Style = ReaLTaiizor.Enum.Poison.ColorStyle.Red;
             metroProgressBar1.TabIndex = 4;
+            metroProgressBar1.TextAlign = ContentAlignment.TopRight;
+            metroProgressBar1.Theme = ReaLTaiizor.Enum.Poison.ThemeStyle.Dark;
             // 
             // Artistt
             // 
@@ -189,16 +300,16 @@
             Titlee.TabIndex = 2;
             Titlee.TextAlign = HorizontalAlignment.Center;
             // 
-            // pictureBox1
+            // artBox
             // 
-            pictureBox1.BorderStyle = BorderStyle.Fixed3D;
-            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(533, 43);
-            pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(247, 240);
-            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
-            pictureBox1.TabIndex = 1;
-            pictureBox1.TabStop = false;
+            artBox.BorderStyle = BorderStyle.FixedSingle;
+            artBox.Image = (Image)resources.GetObject("artBox.Image");
+            artBox.Location = new Point(548, 49);
+            artBox.Name = "artBox";
+            artBox.Size = new Size(240, 240);
+            artBox.SizeMode = PictureBoxSizeMode.StretchImage;
+            artBox.TabIndex = 1;
+            artBox.TabStop = false;
             // 
             // timer1
             // 
@@ -213,9 +324,9 @@
             BackColor = Color.Black;
             ClientSize = new Size(1918, 1078);
             ControlBox = false;
-            Controls.Add(groupBox2);
-            Controls.Add(groupBox1);
-            Controls.Add(groupBox3);
+            Controls.Add(systemBox);
+            Controls.Add(songBox1);
+            Controls.Add(controlBox);
             Font = new Font("Castellar", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             ForeColor = SystemColors.ActiveCaptionText;
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
@@ -224,27 +335,37 @@
             StartPosition = FormStartPosition.CenterScreen;
             WindowState = FormWindowState.Maximized;
             Load += Form1_Load;
-            groupBox1.ResumeLayout(false);
-            groupBox2.ResumeLayout(false);
-            groupBox3.ResumeLayout(false);
-            groupBox3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            songBox1.ResumeLayout(false);
+            systemBox.ResumeLayout(false);
+            systemBox.PerformLayout();
+            controlBox.ResumeLayout(false);
+            controlBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)previousButton).EndInit();
+            ((System.ComponentModel.ISupportInitialize)skipButton).EndInit();
+            ((System.ComponentModel.ISupportInitialize)playButton).EndInit();
+            ((System.ComponentModel.ISupportInitialize)artBox).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
-        private GroupBox groupBox1;
-        private GroupBox groupBox2;
-        private GroupBox groupBox3;
-        private ListBox listBox1;
-        private Panel panel1;
-        private PictureBox pictureBox1;
+        private GroupBox songBox1;
+        private GroupBox systemBox;
+        private GroupBox controlBox;
+        private ListBox songList;
+        private Panel scrollbarHider;
+        private PictureBox artBox;
         private TextBox Titlee;
         private TextBox Artistt;
-        private ReaLTaiizor.Controls.MetroLabel metroLabel1;
+        private ReaLTaiizor.Controls.MetroLabel dateLabel;
         private System.Windows.Forms.Timer timer1;
-        private ReaLTaiizor.Controls.MetroLabel metroLabel2;
+        private ReaLTaiizor.Controls.MetroLabel timeLabel;
         private ReaLTaiizor.Controls.PoisonProgressBar metroProgressBar1;
+        private ReaLTaiizor.Controls.ForeverTextBox searchBox;
+        private PictureBox playButton;
+        private TextBox lyricsBox;
+        private Panel panel1;
+        private PictureBox previousButton;
+        private PictureBox skipButton;
     }
 }
