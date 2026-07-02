@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             songBox1 = new GroupBox();
-            searchBox = new ReaLTaiizor.Controls.ForeverTextBox();
             scrollbarHider = new Panel();
+            searchList = new ListBox();
+            searchBox = new ReaLTaiizor.Controls.ForeverTextBox();
             songList = new ListBox();
             systemBox = new GroupBox();
             panel1 = new Panel();
@@ -40,10 +40,10 @@
             timeLabel = new ReaLTaiizor.Controls.MetroLabel();
             dateLabel = new ReaLTaiizor.Controls.MetroLabel();
             controlBox = new GroupBox();
+            metroProgressBar1 = new ReaLTaiizor.Controls.DungeonTrackBar();
             previousButton = new PictureBox();
             skipButton = new PictureBox();
             playButton = new PictureBox();
-            metroProgressBar1 = new ReaLTaiizor.Controls.PoisonProgressBar();
             Artistt = new TextBox();
             Titlee = new TextBox();
             artBox = new PictureBox();
@@ -60,8 +60,9 @@
             // songBox1
             // 
             songBox1.AutoSize = true;
-            songBox1.Controls.Add(searchBox);
             songBox1.Controls.Add(scrollbarHider);
+            songBox1.Controls.Add(searchList);
+            songBox1.Controls.Add(searchBox);
             songBox1.Controls.Add(songList);
             songBox1.Font = new Font("Castellar", 10.2F);
             songBox1.ForeColor = SystemColors.Control;
@@ -71,6 +72,32 @@
             songBox1.TabIndex = 3;
             songBox1.TabStop = false;
             songBox1.Text = "Songs";
+            // 
+            // scrollbarHider
+            // 
+            scrollbarHider.BackColor = Color.Transparent;
+            scrollbarHider.Location = new Point(553, 49);
+            scrollbarHider.Name = "scrollbarHider";
+            scrollbarHider.Padding = new Padding(0, 0, 20, 0);
+            scrollbarHider.Size = new Size(22, 569);
+            scrollbarHider.TabIndex = 1;
+            // 
+            // searchList
+            // 
+            searchList.BackColor = SystemColors.InactiveCaptionText;
+            searchList.BorderStyle = BorderStyle.None;
+            searchList.DrawMode = DrawMode.OwnerDrawFixed;
+            searchList.ForeColor = SystemColors.Control;
+            searchList.FormattingEnabled = true;
+            searchList.IntegralHeight = false;
+            searchList.ItemHeight = 50;
+            searchList.Location = new Point(12, 49);
+            searchList.Name = "searchList";
+            searchList.Size = new Size(563, 569);
+            searchList.TabIndex = 3;
+            searchList.Visible = false;
+            searchList.DrawItem += Songs_DrawItem;
+            searchList.SelectedIndexChanged += searchList_SelectedIndexChanged_1;
             // 
             // searchBox
             // 
@@ -95,21 +122,11 @@
             searchBox.Enter += searchBox_Click;
             searchBox.GotFocus += searchBox_Click;
             // 
-            // scrollbarHider
-            // 
-            scrollbarHider.BackColor = Color.Transparent;
-            scrollbarHider.Location = new Point(553, 49);
-            scrollbarHider.Name = "scrollbarHider";
-            scrollbarHider.Padding = new Padding(0, 0, 20, 0);
-            scrollbarHider.Size = new Size(22, 569);
-            scrollbarHider.TabIndex = 1;
-            // 
             // songList
             // 
             songList.BackColor = SystemColors.InactiveCaptionText;
             songList.BorderStyle = BorderStyle.None;
             songList.DrawMode = DrawMode.OwnerDrawFixed;
-            songList.Font = new Font("Castellar", 10.2F);
             songList.ForeColor = SystemColors.Control;
             songList.FormattingEnabled = true;
             songList.IntegralHeight = false;
@@ -118,8 +135,8 @@
             songList.Name = "songList";
             songList.Size = new Size(563, 569);
             songList.TabIndex = 0;
-            songList.DrawItem += listBox1_DrawItem;
-            songList.SelectedIndexChanged += listBox1_SelectedIndexChanged_1;
+            songList.DrawItem += Songs_DrawItem;
+            songList.SelectedIndexChanged += songList_SelectedIndexChanged_1;
             // 
             // systemBox
             // 
@@ -201,10 +218,10 @@
             // 
             // controlBox
             // 
+            controlBox.Controls.Add(metroProgressBar1);
             controlBox.Controls.Add(previousButton);
             controlBox.Controls.Add(skipButton);
             controlBox.Controls.Add(playButton);
-            controlBox.Controls.Add(metroProgressBar1);
             controlBox.Controls.Add(Artistt);
             controlBox.Controls.Add(Titlee);
             controlBox.Controls.Add(artBox);
@@ -217,11 +234,32 @@
             controlBox.TabStop = false;
             controlBox.Text = "Control";
             // 
+            // metroProgressBar1
+            // 
+            metroProgressBar1.BorderColor = Color.FromArgb(200, 200, 200);
+            metroProgressBar1.DrawValueString = false;
+            metroProgressBar1.EmptyBackColor = Color.FromArgb(221, 221, 221);
+            metroProgressBar1.FillBackColor = Color.Red;
+            metroProgressBar1.JumpToMouse = true;
+            metroProgressBar1.Location = new Point(100, 531);
+            metroProgressBar1.Maximum = 10;
+            metroProgressBar1.Minimum = 0;
+            metroProgressBar1.MinimumSize = new Size(47, 22);
+            metroProgressBar1.Name = "metroProgressBar1";
+            metroProgressBar1.Size = new Size(1100, 22);
+            metroProgressBar1.TabIndex = 10;
+            metroProgressBar1.Text = "dungeonTrackBar1";
+            metroProgressBar1.ThumbBackColor = Color.FromArgb(244, 244, 244);
+            metroProgressBar1.ThumbBorderColor = Color.FromArgb(180, 180, 180);
+            metroProgressBar1.Value = 0;
+            metroProgressBar1.ValueDivison = ReaLTaiizor.Controls.DungeonTrackBar.ValueDivisor.By1;
+            metroProgressBar1.ValueToSet = 0F;
+            metroProgressBar1.MouseDown += metroProgressBar1_MouseDown;
+            metroProgressBar1.MouseUp += metroProgressBar1_MouseUp;
+            // 
             // previousButton
             // 
             previousButton.BackgroundImageLayout = ImageLayout.Center;
-            previousButton.BorderStyle = BorderStyle.FixedSingle;
-            previousButton.Image = Properties.Resources.play;
             previousButton.Location = new Point(548, 446);
             previousButton.Name = "previousButton";
             previousButton.Size = new Size(53, 53);
@@ -233,8 +271,6 @@
             // skipButton
             // 
             skipButton.BackgroundImageLayout = ImageLayout.Center;
-            skipButton.BorderStyle = BorderStyle.FixedSingle;
-            skipButton.Image = Properties.Resources.play;
             skipButton.Location = new Point(735, 446);
             skipButton.Name = "skipButton";
             skipButton.Size = new Size(53, 53);
@@ -246,8 +282,6 @@
             // playButton
             // 
             playButton.BackgroundImageLayout = ImageLayout.Center;
-            playButton.BorderStyle = BorderStyle.FixedSingle;
-            playButton.Image = Properties.Resources.play;
             playButton.Location = new Point(640, 446);
             playButton.Name = "playButton";
             playButton.Size = new Size(53, 53);
@@ -255,21 +289,6 @@
             playButton.TabIndex = 7;
             playButton.TabStop = false;
             playButton.Click += playButton_Click;
-            // 
-            // metroProgressBar1
-            // 
-            metroProgressBar1.FontWeight = ReaLTaiizor.Extension.Poison.PoisonProgressBarWeight.Bold;
-            metroProgressBar1.ForeColor = SystemColors.Control;
-            metroProgressBar1.HideProgressText = false;
-            metroProgressBar1.Location = new Point(100, 505);
-            metroProgressBar1.MarqueeAnimationSpeed = 1000;
-            metroProgressBar1.Name = "metroProgressBar1";
-            metroProgressBar1.ProgressBarMarqueeWidth = 434;
-            metroProgressBar1.Size = new Size(1100, 20);
-            metroProgressBar1.Style = ReaLTaiizor.Enum.Poison.ColorStyle.Red;
-            metroProgressBar1.TabIndex = 4;
-            metroProgressBar1.TextAlign = ContentAlignment.TopRight;
-            metroProgressBar1.Theme = ReaLTaiizor.Enum.Poison.ThemeStyle.Dark;
             // 
             // Artistt
             // 
@@ -303,7 +322,6 @@
             // artBox
             // 
             artBox.BorderStyle = BorderStyle.FixedSingle;
-            artBox.Image = (Image)resources.GetObject("artBox.Image");
             artBox.Location = new Point(548, 49);
             artBox.Name = "artBox";
             artBox.Size = new Size(240, 240);
@@ -360,12 +378,13 @@
         private ReaLTaiizor.Controls.MetroLabel dateLabel;
         private System.Windows.Forms.Timer timer1;
         private ReaLTaiizor.Controls.MetroLabel timeLabel;
-        private ReaLTaiizor.Controls.PoisonProgressBar metroProgressBar1;
         private ReaLTaiizor.Controls.ForeverTextBox searchBox;
         private PictureBox playButton;
         private TextBox lyricsBox;
         private Panel panel1;
         private PictureBox previousButton;
         private PictureBox skipButton;
+        private ReaLTaiizor.Controls.DungeonTrackBar metroProgressBar1;
+        private ListBox searchList;
     }
 }
