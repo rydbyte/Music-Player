@@ -48,6 +48,7 @@
             Titlee = new TextBox();
             artBox = new PictureBox();
             timer1 = new System.Windows.Forms.Timer(components);
+            skyButton1 = new ReaLTaiizor.Controls.SkyButton();
             songBox1.SuspendLayout();
             systemBox.SuspendLayout();
             controlBox.SuspendLayout();
@@ -140,6 +141,7 @@
             // 
             // systemBox
             // 
+            systemBox.Controls.Add(skyButton1);
             systemBox.Controls.Add(panel1);
             systemBox.Controls.Add(lyricsBox);
             systemBox.Controls.Add(timeLabel);
@@ -156,10 +158,10 @@
             // panel1
             // 
             panel1.BackColor = Color.Transparent;
-            panel1.Location = new Point(503, 27);
+            panel1.Location = new Point(506, 27);
             panel1.Name = "panel1";
             panel1.Padding = new Padding(0, 0, 20, 0);
-            panel1.Size = new Size(24, 367);
+            panel1.Size = new Size(21, 367);
             panel1.TabIndex = 3;
             // 
             // lyricsBox
@@ -218,6 +220,7 @@
             // 
             // controlBox
             // 
+            controlBox.BackColor = SystemColors.ActiveCaptionText;
             controlBox.Controls.Add(metroProgressBar1);
             controlBox.Controls.Add(previousButton);
             controlBox.Controls.Add(skipButton);
@@ -239,7 +242,7 @@
             metroProgressBar1.BorderColor = Color.FromArgb(200, 200, 200);
             metroProgressBar1.DrawValueString = false;
             metroProgressBar1.EmptyBackColor = Color.FromArgb(221, 221, 221);
-            metroProgressBar1.FillBackColor = Color.Red;
+            metroProgressBar1.FillBackColor = Color.MediumOrchid;
             metroProgressBar1.JumpToMouse = true;
             metroProgressBar1.Location = new Point(100, 531);
             metroProgressBar1.Maximum = 10;
@@ -335,6 +338,42 @@
             timer1.Interval = 1000;
             timer1.Tick += timer1_Tick;
             // 
+            // skyButton1
+            // 
+            skyButton1.BackColor = Color.Transparent;
+            skyButton1.DownBGColorA = Color.FromArgb(70, 153, 205);
+            skyButton1.DownBGColorB = Color.FromArgb(53, 124, 170);
+            skyButton1.DownBorderColorA = Color.FromArgb(88, 168, 221);
+            skyButton1.DownBorderColorB = Color.FromArgb(76, 149, 194);
+            skyButton1.DownBorderColorC = Color.FromArgb(38, 93, 131);
+            skyButton1.DownBorderColorD = Color.FromArgb(200, 25, 73, 109);
+            skyButton1.DownForeColor = Color.White;
+            skyButton1.DownShadowForeColor = Color.FromArgb(200, 0, 0, 0);
+            skyButton1.Font = new Font("Verdana", 6.75F, FontStyle.Bold);
+            skyButton1.ForeColor = Color.FromArgb(27, 94, 137);
+            skyButton1.HoverBGColorA = Color.FromArgb(70, 153, 205);
+            skyButton1.HoverBGColorB = Color.FromArgb(53, 124, 170);
+            skyButton1.HoverBorderColorA = Color.FromArgb(88, 168, 221);
+            skyButton1.HoverBorderColorB = Color.FromArgb(76, 149, 194);
+            skyButton1.HoverBorderColorC = Color.FromArgb(38, 93, 131);
+            skyButton1.HoverBorderColorD = Color.FromArgb(200, 25, 73, 109);
+            skyButton1.HoverForeColor = Color.White;
+            skyButton1.HoverShadowForeColor = Color.FromArgb(200, 0, 0, 0);
+            skyButton1.Location = new Point(1777, 306);
+            skyButton1.Name = "skyButton1";
+            skyButton1.NormalBGColorA = Color.FromArgb(245, 245, 245);
+            skyButton1.NormalBGColorB = Color.FromArgb(230, 230, 230);
+            skyButton1.NormalBorderColorA = Color.FromArgb(252, 252, 252);
+            skyButton1.NormalBorderColorB = Color.FromArgb(249, 249, 249);
+            skyButton1.NormalBorderColorC = Color.FromArgb(189, 189, 189);
+            skyButton1.NormalBorderColorD = Color.FromArgb(200, 168, 168, 168);
+            skyButton1.NormalForeColor = Color.FromArgb(27, 94, 137);
+            skyButton1.NormalShadowForeColor = Color.FromArgb(200, 255, 255, 255);
+            skyButton1.Size = new Size(123, 29);
+            skyButton1.SmoothingType = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+            skyButton1.TabIndex = 4;
+            skyButton1.Text = "Import from files";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(12F, 18F);
@@ -386,5 +425,6 @@
         private PictureBox skipButton;
         private ReaLTaiizor.Controls.DungeonTrackBar metroProgressBar1;
         private ListBox searchList;
+        private ReaLTaiizor.Controls.SkyButton skyButton1;
     }
 }
