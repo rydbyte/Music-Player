@@ -19,4 +19,4 @@
 <p>3. Install .exe or install the zip.</p>
   
 <h2>💻 External Librarie Used:</h2>
-<p>* NAudio</p>
+<p>*NAudio</p>
