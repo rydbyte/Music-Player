@@ -18,7 +18,6 @@
 
 <p>3. Install .exe or install the zip.</p>
   
-<h2>💻 Built with</h2>
+<h2>💻 External Librarie Used:s</h2>
 
-*   winforms
-*   c#
+*  NAudio
