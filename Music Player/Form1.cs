@@ -86,35 +86,35 @@ namespace Music_Player
 
         private void Load_Songs(string path)
         {
-            foreach (var mp3 in Directory.EnumerateFiles(path, "*.mp3"))
+            foreach (var file in Directory.EnumerateFiles(path, "*.mp3"))
             {
-                var file = TagLib.File.Create(mp3);
+                var tag = TagLib.File.Create(file);
 
                 // Writer
-                string writer = file.Tag.Composers.Length > 0
-                    ? file.Tag.Composers[0]
+                string writer = tag.Tag.Composers.Length > 0
+                    ? tag.Tag.Composers[0]
                     : "Unknown Artist";
 
-                if (songList.Items.Cast<SongInfo>().Any(s => s.Title == Path.GetFileNameWithoutExtension(mp3)) && songList.Items.Cast<SongInfo>().Any(s => s.Writer == writer) || file.MimeType != "taglib/mp3")
+                if (songList.Items.Cast<SongInfo>().Any(s => s.Title == Path.GetFileNameWithoutExtension(file)) && songList.Items.Cast<SongInfo>().Any(s => s.Writer == writer) || tag.MimeType != "taglib/mp3")
                 {
-                    // Skip if the song is already in the list
+                    // Skip if the song is already in the list or if it is not an mp3
                     continue;
                 }
 
                 // Title
-                string title = Path.GetFileNameWithoutExtension(mp3);
+                string title = Path.GetFileNameWithoutExtension(file);
 
                 // Length in seconds
-                int length = (int)file.Properties.Duration.TotalSeconds;
+                int length = (int)tag.Properties.Duration.TotalSeconds;
 
                 //Album
-                string album = file.Tag.Album;
+                string album = tag.Tag.Album;
 
                 // Album art
                 Image? art = null;
-                if (file.Tag.Pictures.Length > 0)
+                if (tag.Tag.Pictures.Length > 0)
                 {
-                    var bin = file.Tag.Pictures[0].Data.Data;
+                    var bin = tag.Tag.Pictures[0].Data.Data;
                     using (var ms = new MemoryStream(bin))
                         art = Image.FromStream(ms);
                 }
@@ -128,7 +128,7 @@ namespace Music_Player
                     Writer = writer,
                     Art = art,
                     Album = album,
-                    File = mp3
+                    File = file
                 });
             }
         }
@@ -139,6 +139,7 @@ namespace Music_Player
         {
 
             string url = $"https://lrclib.net/api/search?track_name={Uri.EscapeDataString(title)}";
+           
             if (artist != "Unknown Artist")
             {
                 url += $"&artist_name={Uri.EscapeDataString(artist)}";
@@ -170,7 +171,7 @@ namespace Music_Player
 
                 Titlee.Text = selectedSong.Title;
                 Artistt.Text = selectedSong.Writer;
-
+               
                 if (selectedSong.Art != null)
                 {
                     artBox.Image = selectedSong.Art;
@@ -291,11 +292,8 @@ namespace Music_Player
             {
                 // Find the index of the selected song in the main song list
                 int index = songList.Items.Cast<SongInfo>().ToList().FindIndex(s => s.Title == selectedSong.Title && s.Writer == selectedSong.Writer);
-                if (index != -1)
-                {
-                    songList.SelectedIndex = index;
-                    //Play_Song(songList);
-                }
+                songList.SelectedIndex = index;
+                //Play_Song(songList);
             }
         }
 
