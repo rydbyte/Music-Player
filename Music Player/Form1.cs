@@ -247,7 +247,7 @@ namespace Music_Player
             }
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
+        private void timer33ms_Tick(object sender, EventArgs e)
         {
 
             dateLabel.Text = DateTime.Now.ToString("dd/MM/yyyy");
@@ -258,9 +258,9 @@ namespace Music_Player
                 // Update the progress bar and time labels
                 if (!metroProgressBar1IsMouseDown)
                 {
-                    metroProgressBar1.Maximum = (int)audioFile.TotalTime.TotalSeconds;
+                    metroProgressBar1.Maximum = (int)audioFile.TotalTime.TotalMilliseconds;
 
-                    metroProgressBar1.Value = (int)audioFile.CurrentTime.TotalSeconds;
+                    metroProgressBar1.Value = (int)audioFile.CurrentTime.TotalMilliseconds;
                 }
                 TimeSpan currentTime = audioFile.CurrentTime;
                 TimeSpan totalTime = audioFile.TotalTime;
@@ -373,7 +373,7 @@ namespace Music_Player
 
             if (audioFile != null)
             {
-                audioFile.CurrentTime = TimeSpan.FromSeconds(metroProgressBar1.Value);
+                audioFile.CurrentTime = TimeSpan.FromMilliseconds(metroProgressBar1.Value);
             }
         }
 

@@ -50,7 +50,7 @@
             Artistt = new TextBox();
             Titlee = new TextBox();
             artBox = new PictureBox();
-            timer1 = new System.Windows.Forms.Timer(components);
+            timer33ms = new System.Windows.Forms.Timer(components);
             songBox1.SuspendLayout();
             systemBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
@@ -164,7 +164,7 @@
             // 
             pictureBox1.Location = new Point(460, 27);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(403, 94);
+            pictureBox1.Size = new Size(237, 68);
             pictureBox1.TabIndex = 5;
             pictureBox1.TabStop = false;
             // 
@@ -308,7 +308,7 @@
             metroProgressBar1.FillBackColor = Color.MediumOrchid;
             metroProgressBar1.JumpToMouse = true;
             metroProgressBar1.Location = new Point(100, 531);
-            metroProgressBar1.Maximum = 10;
+            metroProgressBar1.Maximum = 200;
             metroProgressBar1.Minimum = 0;
             metroProgressBar1.MinimumSize = new Size(47, 22);
             metroProgressBar1.Name = "metroProgressBar1";
@@ -402,11 +402,11 @@
             artBox.TabIndex = 1;
             artBox.TabStop = false;
             // 
-            // timer1
+            // timer33ms
             // 
-            timer1.Enabled = true;
-            timer1.Interval = 1000;
-            timer1.Tick += timer1_Tick;
+            timer33ms.Enabled = true;
+            timer33ms.Interval = 33;
+            timer33ms.Tick += timer33ms_Tick;
             // 
             // Form1
             // 
@@ -451,7 +451,7 @@
         private TextBox Titlee;
         private TextBox Artistt;
         private ReaLTaiizor.Controls.MetroLabel dateLabel;
-        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Timer timer33ms;
         private ReaLTaiizor.Controls.MetroLabel timeLabel;
         private ReaLTaiizor.Controls.ForeverTextBox searchBox;
         private PictureBox playButton;
