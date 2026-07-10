@@ -1,4 +1,6 @@
+using Music_Player.Properties;
 using NAudio.Wave;
+using NAudio.WaveFormRenderer;
 
 namespace Music_Player
 {
@@ -10,28 +12,17 @@ namespace Music_Player
 
         HttpClient client = new();
 
-        private static readonly Color accentColor = Color.FromArgb(138, 43, 226); // purple accent — change to taste
-        private static readonly Color accentColorLight = Color.FromArgb(90, accentColor); // translucent version for a soft glow
+        private static readonly Color accentColor = Color.FromArgb(138, 43, 226); 
+        private static readonly Color accentColorLight = Color.FromArgb(90, accentColor);
 
-        private static string exeDirectory = Directory.GetCurrentDirectory().ToString();
-        private static string debugDirectory = Directory.GetParent(exeDirectory).ToString();
-        private static string binDirectory = Directory.GetParent(debugDirectory).ToString();
-        private static string baseDirectory = Directory.GetParent(binDirectory).ToString();
-        string localFiles = Path.GetFullPath(
-              baseDirectory + "\\Music\\"
-           );
         string musicFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
+
         private bool metroProgressBar1IsMouseDown;
-
-        private static Image pausePng = Image.FromFile(baseDirectory + "\\Images\\pause.png");
-
-        private static Image playPng = Image.FromFile(baseDirectory + "\\Images\\play.png");
-
-        private static Image emptyPng = Image.FromFile(baseDirectory + "\\Images\\empty.png");
+        private bool looping;
 
         private static Font boldFont = new Font(new FontFamily("Castellar"), 10, FontStyle.Bold);
 
-        public class SongInfo//Class songinfo that gets stored in the listbox
+        private class SongInfo//Class songinfo that gets stored in the listbox
         {
             public string Folder { get; set; }
             public string Album { get; set; }
@@ -41,6 +32,30 @@ namespace Music_Player
             public Image Art { get; set; }
             public int Length { get; set; }
             public string File { get; set; }
+        }
+
+        private Image GenerateWaveform(string filePath, int width, int height)
+        {
+            var renderer = new WaveFormRenderer();
+
+            var settings = new StandardWaveFormRendererSettings
+            {
+                Width = width,
+                TopHeight = height / 2,
+                BottomHeight = height / 2,
+                BackgroundColor = Color.Transparent,
+                TopPeakPen = new Pen(accentColor),
+                BottomPeakPen = new Pen(accentColor),
+                TopSpacerPen = new Pen(Color.Transparent),
+                BottomSpacerPen = new Pen(Color.Transparent),
+                PixelsPerPeak = 1,
+                SpacerPixels = 0,
+            };
+
+            var peakProvider = new RmsPeakProvider(400);
+
+            using var reader = new AudioFileReader(filePath);
+            return renderer.Render(reader, peakProvider, settings);
         }
 
         // ==================== Constructor / Form lifecycle ====================
@@ -53,11 +68,9 @@ namespace Music_Player
         private void Form1_Load(object sender, EventArgs e)
         { 
             outputDevice = new WaveOutEvent();
-            playButton.Image = playPng;
-            artBox.Image = emptyPng;
-            // load songs from the music folder and local files
+            outputDevice.PlaybackStopped += OutputDevice_PlaybackStopped;
+            // load songs from the music folder
             Load_Songs(musicFolder);
-            Load_Songs(localFiles);
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -153,7 +166,7 @@ namespace Music_Player
             if (list.SelectedItem is SongInfo selectedSong)
             {
                 // Handle the selected song
-                playButton.Image = pausePng;
+                playButton.Image = Resources.pause;
 
                 Titlee.Text = selectedSong.Title;
                 Artistt.Text = selectedSong.Writer;
@@ -164,7 +177,7 @@ namespace Music_Player
                 }
                 else
                 {
-                    artBox.Image = emptyPng;
+                    artBox.Image = Resources.empty;
                 }
 
                 // Audio
@@ -176,11 +189,16 @@ namespace Music_Player
                 {
                     outputDevice.Stop();
                 }
-                audioFile?.Dispose();
+                audioFile.Dispose();
 
                 audioFile = new AudioFileReader(audio);
                 outputDevice.Init(audioFile);
                 outputDevice.Play();
+
+                // Wave png
+                Image waveFormImage = GenerateWaveform(audio, pictureBox1.Width- 10, pictureBox1.Height-10);
+                pictureBox1.Image?.Dispose();
+                pictureBox1.Image = waveFormImage;
 
                 // Lyrics
                 if (selectedSong.Lyrics != null || selectedSong.Lyrics != "[]")
@@ -224,12 +242,17 @@ namespace Music_Player
 
         private void OutputDevice_PlaybackStopped(object sender, StoppedEventArgs e)
         {
-            // PlaybackStopped fires both when a track finishes naturally and when
-            // Stop() is called manually (e.g. switching tracks), so only advance
-            // to the next song if playback actually reached the end of the file.
             if (audioFile != null && audioFile.CurrentTime >= audioFile.TotalTime - TimeSpan.FromMilliseconds(200))
             {
-                this.Invoke(() => Next_Song(songList));
+                if (looping)
+                {
+                    audioFile.Position = 0;
+                    outputDevice.Play();
+                }
+                else
+                {
+                    this.Invoke(Next_Song, songList);
+                }
             }
         }
 
@@ -271,7 +294,7 @@ namespace Music_Player
                 if (index != -1)
                 {
                     songList.SelectedIndex = index;
-                    Play_Song(songList);
+                    //Play_Song(songList);
                 }
             }
         }
@@ -314,12 +337,12 @@ namespace Music_Player
             if (outputDevice.PlaybackState == PlaybackState.Paused)
             {
                 outputDevice.Play();
-                playButton.Image = pausePng;
+                playButton.Image = Resources.pause;
             }
             else if (outputDevice.PlaybackState == PlaybackState.Playing)
             {
                 outputDevice.Pause();
-                playButton.Image = playPng;
+                playButton.Image = Resources.play;
             }
         }
 
@@ -341,6 +364,12 @@ namespace Music_Player
             {
                 audioFile.Position = 0;
             }
+        }
+
+        private void loopButton_Click(object sender, EventArgs e)
+        {
+            looping = !looping;
+            loopButton.BackColor = looping ? accentColorLight : SystemColors.ActiveCaptionText;
         }
 
         // ==================== Progress bar (seek) ====================
@@ -371,7 +400,7 @@ namespace Music_Player
             bool selected = (e.State & DrawItemState.Selected) == DrawItemState.Selected;
 
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-
+          
             // Background fill
             using (var bgBrush = new SolidBrush(list.BackColor))
             {

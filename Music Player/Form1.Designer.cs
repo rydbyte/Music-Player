@@ -35,11 +35,14 @@
             searchBox = new ReaLTaiizor.Controls.ForeverTextBox();
             songList = new ListBox();
             systemBox = new GroupBox();
+            pictureBox1 = new PictureBox();
+            skyButton1 = new ReaLTaiizor.Controls.SkyButton();
             panel1 = new Panel();
             lyricsBox = new TextBox();
             timeLabel = new ReaLTaiizor.Controls.MetroLabel();
             dateLabel = new ReaLTaiizor.Controls.MetroLabel();
             controlBox = new GroupBox();
+            loopButton = new PictureBox();
             metroProgressBar1 = new ReaLTaiizor.Controls.DungeonTrackBar();
             previousButton = new PictureBox();
             skipButton = new PictureBox();
@@ -48,10 +51,11 @@
             Titlee = new TextBox();
             artBox = new PictureBox();
             timer1 = new System.Windows.Forms.Timer(components);
-            skyButton1 = new ReaLTaiizor.Controls.SkyButton();
             songBox1.SuspendLayout();
             systemBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             controlBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)loopButton).BeginInit();
             ((System.ComponentModel.ISupportInitialize)previousButton).BeginInit();
             ((System.ComponentModel.ISupportInitialize)skipButton).BeginInit();
             ((System.ComponentModel.ISupportInitialize)playButton).BeginInit();
@@ -141,6 +145,7 @@
             // 
             // systemBox
             // 
+            systemBox.Controls.Add(pictureBox1);
             systemBox.Controls.Add(skyButton1);
             systemBox.Controls.Add(panel1);
             systemBox.Controls.Add(lyricsBox);
@@ -155,10 +160,54 @@
             systemBox.TabStop = false;
             systemBox.Text = "System";
             // 
+            // pictureBox1
+            // 
+            pictureBox1.Location = new Point(460, 27);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(403, 94);
+            pictureBox1.TabIndex = 5;
+            pictureBox1.TabStop = false;
+            // 
+            // skyButton1
+            // 
+            skyButton1.BackColor = Color.Transparent;
+            skyButton1.DownBGColorA = Color.FromArgb(70, 153, 205);
+            skyButton1.DownBGColorB = Color.FromArgb(53, 124, 170);
+            skyButton1.DownBorderColorA = Color.FromArgb(88, 168, 221);
+            skyButton1.DownBorderColorB = Color.FromArgb(76, 149, 194);
+            skyButton1.DownBorderColorC = Color.FromArgb(38, 93, 131);
+            skyButton1.DownBorderColorD = Color.FromArgb(200, 25, 73, 109);
+            skyButton1.DownForeColor = Color.White;
+            skyButton1.DownShadowForeColor = Color.FromArgb(200, 0, 0, 0);
+            skyButton1.Font = new Font("Verdana", 6.75F, FontStyle.Bold);
+            skyButton1.ForeColor = Color.FromArgb(27, 94, 137);
+            skyButton1.HoverBGColorA = Color.FromArgb(70, 153, 205);
+            skyButton1.HoverBGColorB = Color.FromArgb(53, 124, 170);
+            skyButton1.HoverBorderColorA = Color.FromArgb(88, 168, 221);
+            skyButton1.HoverBorderColorB = Color.FromArgb(76, 149, 194);
+            skyButton1.HoverBorderColorC = Color.FromArgb(38, 93, 131);
+            skyButton1.HoverBorderColorD = Color.FromArgb(200, 25, 73, 109);
+            skyButton1.HoverForeColor = Color.White;
+            skyButton1.HoverShadowForeColor = Color.FromArgb(200, 0, 0, 0);
+            skyButton1.Location = new Point(1777, 306);
+            skyButton1.Name = "skyButton1";
+            skyButton1.NormalBGColorA = Color.FromArgb(245, 245, 245);
+            skyButton1.NormalBGColorB = Color.FromArgb(230, 230, 230);
+            skyButton1.NormalBorderColorA = Color.FromArgb(252, 252, 252);
+            skyButton1.NormalBorderColorB = Color.FromArgb(249, 249, 249);
+            skyButton1.NormalBorderColorC = Color.FromArgb(189, 189, 189);
+            skyButton1.NormalBorderColorD = Color.FromArgb(200, 168, 168, 168);
+            skyButton1.NormalForeColor = Color.FromArgb(27, 94, 137);
+            skyButton1.NormalShadowForeColor = Color.FromArgb(200, 255, 255, 255);
+            skyButton1.Size = new Size(123, 29);
+            skyButton1.SmoothingType = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+            skyButton1.TabIndex = 4;
+            skyButton1.Text = "Import from files";
+            // 
             // panel1
             // 
             panel1.BackColor = Color.Transparent;
-            panel1.Location = new Point(506, 27);
+            panel1.Location = new Point(433, 27);
             panel1.Name = "panel1";
             panel1.Padding = new Padding(0, 0, 20, 0);
             panel1.Size = new Size(21, 367);
@@ -173,7 +222,7 @@
             lyricsBox.BorderStyle = BorderStyle.None;
             lyricsBox.Font = new Font("Castellar", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lyricsBox.ForeColor = SystemColors.Control;
-            lyricsBox.Location = new Point(85, 27);
+            lyricsBox.Location = new Point(12, 27);
             lyricsBox.Multiline = true;
             lyricsBox.Name = "lyricsBox";
             lyricsBox.ReadOnly = true;
@@ -221,6 +270,7 @@
             // controlBox
             // 
             controlBox.BackColor = SystemColors.ActiveCaptionText;
+            controlBox.Controls.Add(loopButton);
             controlBox.Controls.Add(metroProgressBar1);
             controlBox.Controls.Add(previousButton);
             controlBox.Controls.Add(skipButton);
@@ -237,9 +287,22 @@
             controlBox.TabStop = false;
             controlBox.Text = "Control";
             // 
+            // loopButton
+            // 
+            loopButton.BackgroundImageLayout = ImageLayout.Center;
+            loopButton.Cursor = Cursors.Hand;
+            loopButton.Location = new Point(812, 448);
+            loopButton.Name = "loopButton";
+            loopButton.Size = new Size(53, 53);
+            loopButton.SizeMode = PictureBoxSizeMode.StretchImage;
+            loopButton.TabIndex = 11;
+            loopButton.TabStop = false;
+            loopButton.Click += loopButton_Click;
+            // 
             // metroProgressBar1
             // 
             metroProgressBar1.BorderColor = Color.FromArgb(200, 200, 200);
+            metroProgressBar1.Cursor = Cursors.Hand;
             metroProgressBar1.DrawValueString = false;
             metroProgressBar1.EmptyBackColor = Color.FromArgb(221, 221, 221);
             metroProgressBar1.FillBackColor = Color.MediumOrchid;
@@ -263,7 +326,9 @@
             // previousButton
             // 
             previousButton.BackgroundImageLayout = ImageLayout.Center;
-            previousButton.Location = new Point(548, 446);
+            previousButton.Cursor = Cursors.Hand;
+            previousButton.Image = Properties.Resources.previous;
+            previousButton.Location = new Point(537, 448);
             previousButton.Name = "previousButton";
             previousButton.Size = new Size(53, 53);
             previousButton.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -274,7 +339,9 @@
             // skipButton
             // 
             skipButton.BackgroundImageLayout = ImageLayout.Center;
-            skipButton.Location = new Point(735, 446);
+            skipButton.Cursor = Cursors.Hand;
+            skipButton.Image = Properties.Resources.skip;
+            skipButton.Location = new Point(724, 448);
             skipButton.Name = "skipButton";
             skipButton.Size = new Size(53, 53);
             skipButton.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -285,7 +352,9 @@
             // playButton
             // 
             playButton.BackgroundImageLayout = ImageLayout.Center;
-            playButton.Location = new Point(640, 446);
+            playButton.Cursor = Cursors.Hand;
+            playButton.Image = Properties.Resources.play;
+            playButton.Location = new Point(630, 448);
             playButton.Name = "playButton";
             playButton.Size = new Size(53, 53);
             playButton.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -325,7 +394,8 @@
             // artBox
             // 
             artBox.BorderStyle = BorderStyle.FixedSingle;
-            artBox.Location = new Point(548, 49);
+            artBox.Image = Properties.Resources.empty;
+            artBox.Location = new Point(537, 61);
             artBox.Name = "artBox";
             artBox.Size = new Size(240, 240);
             artBox.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -337,42 +407,6 @@
             timer1.Enabled = true;
             timer1.Interval = 1000;
             timer1.Tick += timer1_Tick;
-            // 
-            // skyButton1
-            // 
-            skyButton1.BackColor = Color.Transparent;
-            skyButton1.DownBGColorA = Color.FromArgb(70, 153, 205);
-            skyButton1.DownBGColorB = Color.FromArgb(53, 124, 170);
-            skyButton1.DownBorderColorA = Color.FromArgb(88, 168, 221);
-            skyButton1.DownBorderColorB = Color.FromArgb(76, 149, 194);
-            skyButton1.DownBorderColorC = Color.FromArgb(38, 93, 131);
-            skyButton1.DownBorderColorD = Color.FromArgb(200, 25, 73, 109);
-            skyButton1.DownForeColor = Color.White;
-            skyButton1.DownShadowForeColor = Color.FromArgb(200, 0, 0, 0);
-            skyButton1.Font = new Font("Verdana", 6.75F, FontStyle.Bold);
-            skyButton1.ForeColor = Color.FromArgb(27, 94, 137);
-            skyButton1.HoverBGColorA = Color.FromArgb(70, 153, 205);
-            skyButton1.HoverBGColorB = Color.FromArgb(53, 124, 170);
-            skyButton1.HoverBorderColorA = Color.FromArgb(88, 168, 221);
-            skyButton1.HoverBorderColorB = Color.FromArgb(76, 149, 194);
-            skyButton1.HoverBorderColorC = Color.FromArgb(38, 93, 131);
-            skyButton1.HoverBorderColorD = Color.FromArgb(200, 25, 73, 109);
-            skyButton1.HoverForeColor = Color.White;
-            skyButton1.HoverShadowForeColor = Color.FromArgb(200, 0, 0, 0);
-            skyButton1.Location = new Point(1777, 306);
-            skyButton1.Name = "skyButton1";
-            skyButton1.NormalBGColorA = Color.FromArgb(245, 245, 245);
-            skyButton1.NormalBGColorB = Color.FromArgb(230, 230, 230);
-            skyButton1.NormalBorderColorA = Color.FromArgb(252, 252, 252);
-            skyButton1.NormalBorderColorB = Color.FromArgb(249, 249, 249);
-            skyButton1.NormalBorderColorC = Color.FromArgb(189, 189, 189);
-            skyButton1.NormalBorderColorD = Color.FromArgb(200, 168, 168, 168);
-            skyButton1.NormalForeColor = Color.FromArgb(27, 94, 137);
-            skyButton1.NormalShadowForeColor = Color.FromArgb(200, 255, 255, 255);
-            skyButton1.Size = new Size(123, 29);
-            skyButton1.SmoothingType = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-            skyButton1.TabIndex = 4;
-            skyButton1.Text = "Import from files";
             // 
             // Form1
             // 
@@ -395,8 +429,10 @@
             songBox1.ResumeLayout(false);
             systemBox.ResumeLayout(false);
             systemBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             controlBox.ResumeLayout(false);
             controlBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)loopButton).EndInit();
             ((System.ComponentModel.ISupportInitialize)previousButton).EndInit();
             ((System.ComponentModel.ISupportInitialize)skipButton).EndInit();
             ((System.ComponentModel.ISupportInitialize)playButton).EndInit();
@@ -426,5 +462,7 @@
         private ReaLTaiizor.Controls.DungeonTrackBar metroProgressBar1;
         private ListBox searchList;
         private ReaLTaiizor.Controls.SkyButton skyButton1;
+        private PictureBox pictureBox1;
+        private PictureBox loopButton;
     }
 }
