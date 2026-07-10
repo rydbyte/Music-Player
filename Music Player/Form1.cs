@@ -28,7 +28,7 @@ namespace Music_Player
             public string Album { get; set; }
             public string Lyrics { get; set; }
             public string Title { get; set; }
-            public string Writer { get; set; }
+            public string Artist { get; set; }
             public Image Art { get; set; }
             public int Length { get; set; }
             public string File { get; set; }
@@ -84,18 +84,16 @@ namespace Music_Player
 
         // ==================== Song library loading ====================
 
-        private void Load_Songs(string path)
+        private async Task Load_Songs(string path)
         {
             foreach (var file in Directory.EnumerateFiles(path, "*.mp3"))
             {
                 var tag = TagLib.File.Create(file);
 
-                // Writer
-                string writer = tag.Tag.Composers.Length > 0
-                    ? tag.Tag.Composers[0]
-                    : "Unknown Artist";
+                // Artist
+                string artist = tag.Tag.FirstComposer ?? tag.Tag.FirstArtist ?? "Unknown Artist";
 
-                if (songList.Items.Cast<SongInfo>().Any(s => s.Title == Path.GetFileNameWithoutExtension(file)) && songList.Items.Cast<SongInfo>().Any(s => s.Writer == writer) || tag.MimeType != "taglib/mp3")
+                if (songList.Items.Cast<SongInfo>().Any(s => s.Title == Path.GetFileNameWithoutExtension(file)) && songList.Items.Cast<SongInfo>().Any(s => s.Artist == artist) || tag.MimeType != "taglib/mp3")
                 {
                     // Skip if the song is already in the list or if it is not an mp3
                     continue;
@@ -119,13 +117,16 @@ namespace Music_Player
                         art = Image.FromStream(ms);
                 }
 
+                //Lyrics
+                string lyrics = tag.Tag.Lyrics;
+
                 // Add the song info to the ListBox
                 songList.Items.Add(new SongInfo
                 {
                     Folder = path,
                     Length = length,
                     Title = title,
-                    Writer = writer,
+                    Artist = artist,
                     Art = art,
                     Album = album,
                     File = file
@@ -168,10 +169,11 @@ namespace Music_Player
             {
                 // Handle the selected song
                 playButton.Image = Resources.pause;
-
                 Titlee.Text = selectedSong.Title;
-                Artistt.Text = selectedSong.Writer;
-               
+                Artistt.Text = selectedSong.Artist;
+                metroProgressBar1.Value = 0;
+                lyricsBox.Text = selectedSong.Lyrics;
+
                 if (selectedSong.Art != null)
                 {
                     artBox.Image = selectedSong.Art;
@@ -181,37 +183,25 @@ namespace Music_Player
                     artBox.Image = Resources.empty;
                 }
 
+
+
                 // Audio
                 string audio = Path.Combine(selectedSong.Folder, selectedSong.File);
 
-                // Stop and release whatever's currently loaded before loading the
-                // next track — NAudio throws if Init() is called while still playing.
                 if (outputDevice.PlaybackState != PlaybackState.Stopped)
                 {
                     outputDevice.Stop();
                 }
-                audioFile.Dispose();
+                audioFile?.Dispose();
 
                 audioFile = new AudioFileReader(audio);
                 outputDevice.Init(audioFile);
                 outputDevice.Play();
 
                 // Wave png
-                Image waveFormImage = GenerateWaveform(audio, pictureBox1.Width- 10, pictureBox1.Height-10);
+                Image waveFormImage = await Task.Run(() => GenerateWaveform(audio, pictureBox1.Width - 10, pictureBox1.Height - 10));
                 pictureBox1.Image?.Dispose();
                 pictureBox1.Image = waveFormImage;
-
-                // Lyrics
-                if (selectedSong.Lyrics != null || selectedSong.Lyrics != "[]")
-                {
-                    lyricsBox.Text = selectedSong.Lyrics;
-                }
-                else
-                {
-                    string lyrics = await Get_Lyrics(selectedSong.Writer, selectedSong.Title);
-                    lyricsBox.Text = lyrics;
-                    selectedSong.Lyrics = lyrics;
-                }
             }
         }
 
@@ -252,7 +242,7 @@ namespace Music_Player
                 }
                 else
                 {
-                    this.Invoke(Next_Song, songList);
+                    this.Invoke(() => Next_Song(songList));
                 }
             }
         }
@@ -291,7 +281,7 @@ namespace Music_Player
             if (searchList.SelectedItem is SongInfo selectedSong)
             {
                 // Find the index of the selected song in the main song list
-                int index = songList.Items.Cast<SongInfo>().ToList().FindIndex(s => s.Title == selectedSong.Title && s.Writer == selectedSong.Writer);
+                int index = songList.Items.Cast<SongInfo>().ToList().FindIndex(s => s.Title == selectedSong.Title && s.Artist == selectedSong.Artist);
                 songList.SelectedIndex = index;
                 //Play_Song(songList);
             }
@@ -439,7 +429,7 @@ namespace Music_Player
             Brush writerBrush = selected ? new SolidBrush(Color.Gainsboro) : Brushes.Gray;
 
             e.Graphics.DrawString(song.Title, boldFont, titleBrush, textLeft, e.Bounds.Top + 5);
-            e.Graphics.DrawString(song.Writer, e.Font, writerBrush, textLeft, e.Bounds.Top + 25);
+            e.Graphics.DrawString(song.Artist, e.Font, writerBrush, textLeft, e.Bounds.Top + 25);
 
             if (selected)
             {
