@@ -65,21 +65,12 @@ namespace Music_Player
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private async void Form1_LoadAsync(object sender, EventArgs e)
         { 
             outputDevice = new WaveOutEvent();
             outputDevice.PlaybackStopped += OutputDevice_PlaybackStopped;
-            // load songs from the music folder
-            Load_Songs(musicFolder);
-        }
-
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            // Clean up the NAudio device/handle on shutdown.
-            outputDevice.PlaybackStopped -= OutputDevice_PlaybackStopped;
-            outputDevice.Stop();
-            outputDevice.Dispose();
-            audioFile?.Dispose();
+            // load songs from the music folder on different thread to avoid blocking the UI
+            await Load_Songs(musicFolder);
         }
 
         // ==================== Song library loading ====================
@@ -163,7 +154,7 @@ namespace Music_Player
 
         // ==================== Playback control ====================
 
-        private async void Play_Song(ListBox list)
+        private void Play_Song(ListBox list)
         {
             if (list.SelectedItem is SongInfo selectedSong)
             {
@@ -183,8 +174,6 @@ namespace Music_Player
                     artBox.Image = Resources.empty;
                 }
 
-
-
                 // Audio
                 string audio = Path.Combine(selectedSong.Folder, selectedSong.File);
 
@@ -198,10 +187,7 @@ namespace Music_Player
                 outputDevice.Init(audioFile);
                 outputDevice.Play();
 
-                // Wave png
-                Image waveFormImage = await Task.Run(() => GenerateWaveform(audio, pictureBox1.Width - 10, pictureBox1.Height - 10));
-                pictureBox1.Image?.Dispose();
-                pictureBox1.Image = waveFormImage;
+                audioFile.Volume = (float)volumeBar.Value / 100;
             }
         }
 
@@ -374,6 +360,14 @@ namespace Music_Player
             if (audioFile != null)
             {
                 audioFile.CurrentTime = TimeSpan.FromMilliseconds(metroProgressBar1.Value);
+            }
+        }
+
+        private void volumeBar_ValueChanged(object sender, EventArgs e)
+        {
+            if (audioFile != null)
+            {
+                audioFile.Volume = volumeBar.Value / 100.0f;
             }
         }
 

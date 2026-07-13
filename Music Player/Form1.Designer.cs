@@ -35,7 +35,10 @@
             searchBox = new ReaLTaiizor.Controls.ForeverTextBox();
             songList = new ListBox();
             systemBox = new GroupBox();
-            pictureBox1 = new PictureBox();
+            volumeBar = new TrackBar();
+            circleProgressBar1 = new ReaLTaiizor.Controls.CircleProgressBar();
+            volumeMeter1 = new NAudio.Gui.VolumeMeter();
+            waveViewer1 = new NAudio.Gui.WaveViewer();
             skyButton1 = new ReaLTaiizor.Controls.SkyButton();
             panel1 = new Panel();
             lyricsBox = new TextBox();
@@ -53,7 +56,7 @@
             timer33ms = new System.Windows.Forms.Timer(components);
             songBox1.SuspendLayout();
             systemBox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)volumeBar).BeginInit();
             controlBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)loopButton).BeginInit();
             ((System.ComponentModel.ISupportInitialize)previousButton).BeginInit();
@@ -145,7 +148,10 @@
             // 
             // systemBox
             // 
-            systemBox.Controls.Add(pictureBox1);
+            systemBox.Controls.Add(volumeBar);
+            systemBox.Controls.Add(circleProgressBar1);
+            systemBox.Controls.Add(volumeMeter1);
+            systemBox.Controls.Add(waveViewer1);
             systemBox.Controls.Add(skyButton1);
             systemBox.Controls.Add(panel1);
             systemBox.Controls.Add(lyricsBox);
@@ -160,13 +166,56 @@
             systemBox.TabStop = false;
             systemBox.Text = "System";
             // 
-            // pictureBox1
+            // volumeBar
             // 
-            pictureBox1.Location = new Point(460, 27);
-            pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(237, 68);
-            pictureBox1.TabIndex = 5;
-            pictureBox1.TabStop = false;
+            volumeBar.Cursor = Cursors.HSplit;
+            volumeBar.LargeChange = 1;
+            volumeBar.Location = new Point(1439, 59);
+            volumeBar.Maximum = 100;
+            volumeBar.Name = "volumeBar";
+            volumeBar.Orientation = Orientation.Vertical;
+            volumeBar.Size = new Size(56, 276);
+            volumeBar.TabIndex = 0;
+            volumeBar.TickFrequency = 5;
+            volumeBar.Value = 100;
+            volumeBar.ValueChanged += volumeBar_ValueChanged;
+            // 
+            // circleProgressBar1
+            // 
+            circleProgressBar1.Font = new Font("Segoe UI", 15F);
+            circleProgressBar1.Location = new Point(1333, 27);
+            circleProgressBar1.Maximum = 100L;
+            circleProgressBar1.MinimumSize = new Size(100, 100);
+            circleProgressBar1.Name = "circleProgressBar1";
+            circleProgressBar1.PercentColor = Color.White;
+            circleProgressBar1.ProgressColor1 = Color.FromArgb(92, 92, 92);
+            circleProgressBar1.ProgressColor2 = Color.FromArgb(92, 92, 92);
+            circleProgressBar1.ProgressShape = ReaLTaiizor.Controls.CircleProgressBar._ProgressShape.Round;
+            circleProgressBar1.Size = new Size(100, 100);
+            circleProgressBar1.TabIndex = 14;
+            circleProgressBar1.Text = "circleProgressBar1";
+            circleProgressBar1.Value = 2L;
+            // 
+            // volumeMeter1
+            // 
+            volumeMeter1.Amplitude = 0F;
+            volumeMeter1.Location = new Point(796, 86);
+            volumeMeter1.MaxDb = 18F;
+            volumeMeter1.MinDb = -60F;
+            volumeMeter1.Name = "volumeMeter1";
+            volumeMeter1.Size = new Size(94, 29);
+            volumeMeter1.TabIndex = 13;
+            volumeMeter1.Text = "volumeMeter1";
+            // 
+            // waveViewer1
+            // 
+            waveViewer1.Location = new Point(470, 27);
+            waveViewer1.Name = "waveViewer1";
+            waveViewer1.SamplesPerPixel = 128;
+            waveViewer1.Size = new Size(188, 188);
+            waveViewer1.StartPosition = 0L;
+            waveViewer1.TabIndex = 12;
+            waveViewer1.WaveStream = null;
             // 
             // skyButton1
             // 
@@ -425,11 +474,11 @@
             Name = "Form1";
             StartPosition = FormStartPosition.CenterScreen;
             WindowState = FormWindowState.Maximized;
-            Load += Form1_Load;
+            Load += Form1_LoadAsync;
             songBox1.ResumeLayout(false);
             systemBox.ResumeLayout(false);
             systemBox.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)volumeBar).EndInit();
             controlBox.ResumeLayout(false);
             controlBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)loopButton).EndInit();
@@ -462,7 +511,10 @@
         private ReaLTaiizor.Controls.DungeonTrackBar metroProgressBar1;
         private ListBox searchList;
         private ReaLTaiizor.Controls.SkyButton skyButton1;
-        private PictureBox pictureBox1;
         private PictureBox loopButton;
+        private NAudio.Gui.VolumeMeter volumeMeter1;
+        private NAudio.Gui.WaveViewer waveViewer1;
+        private ReaLTaiizor.Controls.CircleProgressBar circleProgressBar1;
+        private TrackBar volumeBar;
     }
 }
