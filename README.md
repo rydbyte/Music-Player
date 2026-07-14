@@ -20,3 +20,4 @@
   
 <h2>💻 External Librarie Used:</h2>
 <p>*NAudio</p>
+<p>*ScottPlot</p>
