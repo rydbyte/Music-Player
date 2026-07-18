@@ -37,8 +37,6 @@
             systemBox = new GroupBox();
             volumeBar = new TrackBar();
             circleProgressBar1 = new ReaLTaiizor.Controls.CircleProgressBar();
-            volumeMeter1 = new NAudio.Gui.VolumeMeter();
-            waveViewer1 = new NAudio.Gui.WaveViewer();
             skyButton1 = new ReaLTaiizor.Controls.SkyButton();
             panel1 = new Panel();
             lyricsBox = new TextBox();
@@ -150,8 +148,6 @@
             // 
             systemBox.Controls.Add(volumeBar);
             systemBox.Controls.Add(circleProgressBar1);
-            systemBox.Controls.Add(volumeMeter1);
-            systemBox.Controls.Add(waveViewer1);
             systemBox.Controls.Add(skyButton1);
             systemBox.Controls.Add(panel1);
             systemBox.Controls.Add(lyricsBox);
@@ -195,27 +191,6 @@
             circleProgressBar1.TabIndex = 14;
             circleProgressBar1.Text = "circleProgressBar1";
             circleProgressBar1.Value = 2L;
-            // 
-            // volumeMeter1
-            // 
-            volumeMeter1.Amplitude = 0F;
-            volumeMeter1.Location = new Point(796, 86);
-            volumeMeter1.MaxDb = 18F;
-            volumeMeter1.MinDb = -60F;
-            volumeMeter1.Name = "volumeMeter1";
-            volumeMeter1.Size = new Size(94, 29);
-            volumeMeter1.TabIndex = 13;
-            volumeMeter1.Text = "volumeMeter1";
-            // 
-            // waveViewer1
-            // 
-            waveViewer1.Location = new Point(470, 27);
-            waveViewer1.Name = "waveViewer1";
-            waveViewer1.SamplesPerPixel = 128;
-            waveViewer1.Size = new Size(188, 188);
-            waveViewer1.StartPosition = 0L;
-            waveViewer1.TabIndex = 12;
-            waveViewer1.WaveStream = null;
             // 
             // skyButton1
             // 
@@ -512,8 +487,6 @@
         private ListBox searchList;
         private ReaLTaiizor.Controls.SkyButton skyButton1;
         private PictureBox loopButton;
-        private NAudio.Gui.VolumeMeter volumeMeter1;
-        private NAudio.Gui.WaveViewer waveViewer1;
         private ReaLTaiizor.Controls.CircleProgressBar circleProgressBar1;
         private TrackBar volumeBar;
     }

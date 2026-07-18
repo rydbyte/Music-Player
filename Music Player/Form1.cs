@@ -12,7 +12,7 @@ namespace Music_Player
 
         HttpClient client = new();
 
-        private static readonly Color accentColor = Color.FromArgb(138, 43, 226); 
+        private static readonly Color accentColor = Color.FromArgb(138, 43, 226);
         private static readonly Color accentColorLight = Color.FromArgb(90, accentColor);
 
         string musicFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
@@ -52,6 +52,9 @@ namespace Music_Player
                 SpacerPixels = 0,
             };
 
+            // MaxPeakProvider (the implicit default) grabs the loudest sample per
+            // column, which reads as a solid block on loud/normalized mp3s.
+            // RmsPeakProvider averages energy per block, giving natural-looking peaks.
             var peakProvider = new RmsPeakProvider(400);
 
             using var reader = new AudioFileReader(filePath);
@@ -61,15 +64,15 @@ namespace Music_Player
         // ==================== Constructor / Form lifecycle ====================
 
         public Form1()
-        {   
+        {
             InitializeComponent();
         }
 
         private async void Form1_LoadAsync(object sender, EventArgs e)
-        { 
+        {
             outputDevice = new WaveOutEvent();
             outputDevice.PlaybackStopped += OutputDevice_PlaybackStopped;
-            // load songs from the music folder on different thread to avoid blocking the UI
+
             await Load_Songs(musicFolder);
         }
 
@@ -77,51 +80,65 @@ namespace Music_Player
 
         private async Task Load_Songs(string path)
         {
-            foreach (var file in Directory.EnumerateFiles(path, "*.mp3"))
+            var songlist = new List<SongInfo>();
+
+            await Task.Run(() =>
             {
-                var tag = TagLib.File.Create(file);
-
-                // Artist
-                string artist = tag.Tag.FirstComposer ?? tag.Tag.FirstArtist ?? "Unknown Artist";
-
-                if (songList.Items.Cast<SongInfo>().Any(s => s.Title == Path.GetFileNameWithoutExtension(file)) && songList.Items.Cast<SongInfo>().Any(s => s.Artist == artist) || tag.MimeType != "taglib/mp3")
+                foreach (var file in Directory.EnumerateFiles(path, "*.mp3"))
                 {
-                    // Skip if the song is already in the list or if it is not an mp3
-                    continue;
+                    var tag = TagLib.File.Create(file);
+
+                    // Artist
+                    string artist = tag.Tag.FirstComposer ?? tag.Tag.FirstArtist ?? "Unknown Artist";
+
+                    // Title
+                    string title = Path.GetFileNameWithoutExtension(file);
+
+                    if (tag.MimeType != "taglib/mp3")
+                    {
+                        continue;
+                    }
+
+                    if (songlist.Any(s => s.Title == title && s.Artist == artist))
+                    {
+                        continue;
+                    }
+
+                    // Length in seconds
+                    int length = (int)tag.Properties.Duration.TotalSeconds;
+
+                    //Album
+                    string album = tag.Tag.Album;
+
+                    // Album art
+                    Image? art = null;
+                    if (tag.Tag.Pictures.Length > 0)
+                    {
+                        var bin = tag.Tag.Pictures[0].Data.Data;
+                        using (var ms = new MemoryStream(bin))
+                            art = Image.FromStream(ms);
+                    }
+
+                    //Lyrics
+                    string lyrics = tag.Tag.Lyrics;
+
+                    songlist.Add(new SongInfo
+                    {
+                        Folder = path,
+                        Length = length,
+                        Title = title,
+                        Artist = artist,
+                        Art = art,
+                        Album = album,
+                        File = file,
+                        Lyrics = lyrics
+                    });
                 }
+            });
 
-                // Title
-                string title = Path.GetFileNameWithoutExtension(file);
-
-                // Length in seconds
-                int length = (int)tag.Properties.Duration.TotalSeconds;
-
-                //Album
-                string album = tag.Tag.Album;
-
-                // Album art
-                Image? art = null;
-                if (tag.Tag.Pictures.Length > 0)
-                {
-                    var bin = tag.Tag.Pictures[0].Data.Data;
-                    using (var ms = new MemoryStream(bin))
-                        art = Image.FromStream(ms);
-                }
-
-                //Lyrics
-                string lyrics = tag.Tag.Lyrics;
-
-                // Add the song info to the ListBox
-                songList.Items.Add(new SongInfo
-                {
-                    Folder = path,
-                    Length = length,
-                    Title = title,
-                    Artist = artist,
-                    Art = art,
-                    Album = album,
-                    File = file
-                });
+            foreach (var song in songlist)
+            {
+                songList.Items.Add(song);
             }
         }
 
@@ -131,7 +148,7 @@ namespace Music_Player
         {
 
             string url = $"https://lrclib.net/api/search?track_name={Uri.EscapeDataString(title)}";
-           
+
             if (artist != "Unknown Artist")
             {
                 url += $"&artist_name={Uri.EscapeDataString(artist)}";
@@ -382,7 +399,7 @@ namespace Music_Player
             bool selected = (e.State & DrawItemState.Selected) == DrawItemState.Selected;
 
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-          
+
             // Background fill
             using (var bgBrush = new SolidBrush(list.BackColor))
             {
