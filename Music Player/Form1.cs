@@ -15,12 +15,14 @@ namespace Music_Player
         private static readonly Color accentColor = Color.FromArgb(138, 43, 226);
         private static readonly Color accentColorLight = Color.FromArgb(90, accentColor);
 
-        string musicFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
+        private string musicFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
+        private List<SongInfo> songlist = new List<SongInfo>();
+        private List<string> compatibleFormats = new List<string> { ".mp3", ".wav", ".aiff"};
 
         private bool metroProgressBar1IsMouseDown;
         private bool looping;
 
-        private static Font boldFont = new Font(new FontFamily("Castellar"), 10, FontStyle.Bold);
+        private static Font boldFont = new Font(new FontFamily("Segoe UI"), 10, FontStyle.Bold);
 
         private class SongInfo//Class songinfo that gets stored in the listbox
         {
@@ -32,6 +34,9 @@ namespace Music_Player
             public Image Art { get; set; }
             public int Length { get; set; }
             public string File { get; set; }
+            public string Format { get; set; }
+            public string Size { get; set; }
+            public string Bitrate { get; set; }
         }
 
         private Image GenerateWaveform(string filePath, int width, int height)
@@ -72,6 +77,12 @@ namespace Music_Player
         {
             outputDevice = new WaveOutEvent();
             outputDevice.PlaybackStopped += OutputDevice_PlaybackStopped;
+            //STOP FUCKING CHANGING THE COLORS RETARTED WINFORM
+            metroDivider1.ForeColor = Color.White;
+            metroDivider2.ForeColor = Color.White;
+            metroDivider3.ForeColor = Color.White;
+            metroDivider4.ForeColor = Color.White;
+            timeLabel.ForeColor = Color.White;
 
             await Load_Songs(musicFolder);
         }
@@ -80,13 +91,13 @@ namespace Music_Player
 
         private async Task Load_Songs(string path)
         {
-            var songlist = new List<SongInfo>();
 
             await Task.Run(() =>
             {
                 foreach (var file in Directory.EnumerateFiles(path, "*.mp3"))
                 {
                     var tag = TagLib.File.Create(file);
+                    FileInfo fileInfo = new FileInfo(file);
 
                     // Artist
                     string artist = tag.Tag.FirstComposer ?? tag.Tag.FirstArtist ?? "Unknown Artist";
@@ -94,7 +105,7 @@ namespace Music_Player
                     // Title
                     string title = Path.GetFileNameWithoutExtension(file);
 
-                    if (tag.MimeType != "taglib/mp3")
+                    if (!compatibleFormats.Contains(Path.GetExtension(file)))
                     {
                         continue;
                     }
@@ -104,11 +115,11 @@ namespace Music_Player
                         continue;
                     }
 
-                    // Length in seconds
+                    // Length
                     int length = (int)tag.Properties.Duration.TotalSeconds;
 
-                    //Album
-                    string album = tag.Tag.Album;
+                    // Album
+                    string album = tag.Tag.Album ?? "Unknown Album";
 
                     // Album art
                     Image? art = null;
@@ -119,8 +130,17 @@ namespace Music_Player
                             art = Image.FromStream(ms);
                     }
 
-                    //Lyrics
-                    string lyrics = tag.Tag.Lyrics;
+                    // Lyrics
+                    string lyrics = tag.Tag.Lyrics; // ?? await Get_Lyrics(artist, title);
+
+                    // Size MB = B / 1,048,576
+                    string size = $"{fileInfo.Length / 1048576.0:F2} MB";
+
+                    // Format
+                    string format = Path.GetExtension(file).TrimStart('.').ToUpper();
+
+                    // Bitrate
+                    string bitRate = tag.Properties.AudioBitrate.ToString() + "kbps";
 
                     songlist.Add(new SongInfo
                     {
@@ -131,12 +151,15 @@ namespace Music_Player
                         Art = art,
                         Album = album,
                         File = file,
-                        Lyrics = lyrics
+                        Lyrics = lyrics,
+                        Size = size,
+                        Format = format,
+                        Bitrate = bitRate
                     });
                 }
             });
 
-            foreach (var song in songlist)
+            foreach (SongInfo song in songlist)
             {
                 songList.Items.Add(song);
             }
@@ -175,12 +198,16 @@ namespace Music_Player
         {
             if (list.SelectedItem is SongInfo selectedSong)
             {
-                // Handle the selected song
+                // Handle the selected song ui
                 playButton.Image = Resources.pause;
                 Titlee.Text = selectedSong.Title;
                 Artistt.Text = selectedSong.Artist;
                 metroProgressBar1.Value = 0;
                 lyricsBox.Text = selectedSong.Lyrics;
+                albumValue.Text = selectedSong.Album;
+                bitrateValue.Text = selectedSong.Bitrate;
+                fileSizeValue.Text = selectedSong.Size;
+                formatValue.Text = selectedSong.Format;
 
                 if (selectedSong.Art != null)
                 {
@@ -294,23 +321,21 @@ namespace Music_Player
 
         private void searchBox_TextChanged(object sender, EventArgs e)
         {
+            songList.Items.Clear();
             if (searchBox.Text == "" || searchBox.Text == null)
             {
-                searchList.Visible = false;
+                foreach(SongInfo song in songlist)
+                {
+                    songList.Items.Add(song);
+                }
             }
             else
             {
-                searchList.Visible = true;
-                foreach (var item in songList.Items.Cast<SongInfo>())
+                foreach (SongInfo song in songlist)
                 {
-                    if (item.Title.StartsWith(searchBox.Text, StringComparison.OrdinalIgnoreCase))
+                    if (song.Title.ToLower().Contains(searchBox.Text.ToLower()) || song.Artist.ToLower().Contains(searchBox.Text.ToLower()))
                     {
-                        if (searchList.Items.Contains(item)) continue;
-                        searchList.Items.Add(item);
-                    }
-                    else
-                    {
-                        searchList.Items.Remove(item);
+                        songList.Items.Add(song);
                     }
                 }
             }
@@ -440,7 +465,7 @@ namespace Music_Player
             Brush writerBrush = selected ? new SolidBrush(Color.Gainsboro) : Brushes.Gray;
 
             e.Graphics.DrawString(song.Title, boldFont, titleBrush, textLeft, e.Bounds.Top + 5);
-            e.Graphics.DrawString(song.Artist, e.Font, writerBrush, textLeft, e.Bounds.Top + 25);
+            e.Graphics.DrawString(song.Artist, boldFont, writerBrush, textLeft, e.Bounds.Top + 25);
 
             if (selected)
             {
