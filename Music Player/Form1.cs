@@ -17,7 +17,7 @@ namespace Music_Player
 
         private string musicFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
         private List<SongInfo> songlist = new List<SongInfo>();
-        private List<string> compatibleFormats = new List<string> { ".mp3", ".wav", ".aiff"};
+        private List<string> compatibleFormats = new List<string> { ".mp3", ".wav", ".aiff" };
 
         private bool metroProgressBar1IsMouseDown;
         private bool looping;
@@ -32,7 +32,7 @@ namespace Music_Player
             public string Title { get; set; }
             public string Artist { get; set; }
             public Image Art { get; set; }
-            public int Length { get; set; }
+            public string Length { get; set; }
             public string File { get; set; }
             public string Format { get; set; }
             public string Size { get; set; }
@@ -80,6 +80,8 @@ namespace Music_Player
             //STOP FUCKING CHANGING THE COLORS RETARTED WINFORM
             metroDivider1.ForeColor = Color.White;
             metroDivider2.ForeColor = Color.White;
+            metroProgressBar1.HandlerColor = Color.Cyan;
+            metroProgressBar1.BackColor = Color.FromArgb(12, 6, 12);
             metroDivider3.ForeColor = Color.White;
             metroDivider4.ForeColor = Color.White;
             timeLabel.ForeColor = Color.White;
@@ -116,7 +118,7 @@ namespace Music_Player
                     }
 
                     // Length
-                    int length = (int)tag.Properties.Duration.TotalSeconds;
+                    string length = TimeSpan.FromSeconds(tag.Properties.Duration.TotalSeconds).ToString(@"mm\:ss");
 
                     // Album
                     string album = tag.Tag.Album ?? "Unknown Album";
@@ -208,6 +210,7 @@ namespace Music_Player
                 bitrateValue.Text = selectedSong.Bitrate;
                 fileSizeValue.Text = selectedSong.Size;
                 formatValue.Text = selectedSong.Format;
+                totalTime.Text = selectedSong.Length;
 
                 if (selectedSong.Art != null)
                 {
@@ -292,10 +295,7 @@ namespace Music_Player
 
                     metroProgressBar1.Value = (int)audioFile.CurrentTime.TotalMilliseconds;
                 }
-                TimeSpan currentTime = audioFile.CurrentTime;
-                TimeSpan totalTime = audioFile.TotalTime;
-                //labelCurrentTime.Text = currentTime.ToString(@"mm\:ss");
-                //labelTotalTime.Text = totalTime.ToString(@"mm\:ss");
+                currentTime.Text = audioFile.CurrentTime.ToString(@"mm\:ss");
             }
         }
 
@@ -306,16 +306,16 @@ namespace Music_Player
             Play_Song(songList);
         }
 
-        private void searchList_SelectedIndexChanged_1(object sender, EventArgs e)
-        {
-            if (searchList.SelectedItem is SongInfo selectedSong)
-            {
-                // Find the index of the selected song in the main song list
-                int index = songList.Items.Cast<SongInfo>().ToList().FindIndex(s => s.Title == selectedSong.Title && s.Artist == selectedSong.Artist);
-                songList.SelectedIndex = index;
-                //Play_Song(songList);
-            }
-        }
+        //private void searchList_SelectedIndexChanged_1(object sender, EventArgs e)
+        //{
+        //    if (searchList.SelectedItem is SongInfo selectedSong)
+        //    {
+        //        // Find the index of the selected song in the main song list
+        //        int index = songList.Items.Cast<SongInfo>().ToList().FindIndex(s => s.Title == selectedSong.Title && s.Artist == selectedSong.Artist);
+        //        songList.SelectedIndex = index;
+        //        //Play_Song(songList);
+        //    }
+        //}
 
         // ==================== Search box ====================
 
@@ -324,7 +324,7 @@ namespace Music_Player
             songList.Items.Clear();
             if (searchBox.Text == "" || searchBox.Text == null)
             {
-                foreach(SongInfo song in songlist)
+                foreach (SongInfo song in songlist)
                 {
                     songList.Items.Add(song);
                 }
@@ -340,13 +340,13 @@ namespace Music_Player
                 }
             }
         }
+        
+        // ==================== Button interactions ====================
 
         private void searchBox_Click(object sender, EventArgs e)
         {
             searchBox.Text = "";
         }
-
-        // ==================== Transport buttons ====================
 
         private void playButton_Click(object sender, EventArgs e)
         {
@@ -388,7 +388,17 @@ namespace Music_Player
             loopButton.BackColor = looping ? accentColorLight : SystemColors.ActiveCaptionText;
         }
 
-        // ==================== Progress bar (seek) ====================
+        private void onlineButton_Click(object sender, EventArgs e)
+        {
+            onlineList!.Visible = onlineList.Visible = true;
+        }
+
+        private void localButton_Click(object sender, EventArgs e)
+        {
+            onlineList.Visible = false;
+        }
+
+        // ==================== Progress bar ====================
 
         private void metroProgressBar1_MouseDown(object sender, MouseEventArgs e)
         {
@@ -433,7 +443,6 @@ namespace Music_Player
 
             if (selected)
             {
-                // Rounded highlight rectangle, inset slightly from the edges
                 Rectangle highlightRect = new Rectangle(
                     e.Bounds.Left + 2,
                     e.Bounds.Top + 2,
@@ -441,12 +450,11 @@ namespace Music_Player
                     e.Bounds.Height - 4
                 );
 
-                using (var path = RoundedRect(highlightRect, 3))
                 using (var fillBrush = new SolidBrush(accentColorLight))
                 using (var borderPen = new Pen(accentColor, 1.5f))
                 {
-                    e.Graphics.FillPath(fillBrush, path);
-                    e.Graphics.DrawPath(borderPen, path);
+                    e.Graphics.FillRectangle(fillBrush, highlightRect);
+                    e.Graphics.DrawRectangle(borderPen, highlightRect);
                 }
             }
 
@@ -459,7 +467,7 @@ namespace Music_Player
                     new Rectangle(e.Bounds.Left + padding, e.Bounds.Top + padding, imgSize, imgSize));
             }
 
-            int textLeft = e.Bounds.Left + imgSize + (padding * 2);
+            int textLeft = e.Bounds.Left + imgSize - 5 + (padding * 2);
 
             Brush titleBrush = selected ? new SolidBrush(Color.White) : Brushes.White;
             Brush writerBrush = selected ? new SolidBrush(Color.Gainsboro) : Brushes.Gray;
@@ -472,24 +480,6 @@ namespace Music_Player
                 titleBrush.Dispose();
                 writerBrush.Dispose();
             }
-        }
-
-        private static System.Drawing.Drawing2D.GraphicsPath RoundedRect(Rectangle bounds, int radius)
-        {
-            int diameter = radius * 2;
-            var path = new System.Drawing.Drawing2D.GraphicsPath();
-            var arc = new Rectangle(bounds.Location, new Size(diameter, diameter));
-
-            path.AddArc(arc, 180, 90);
-            arc.X = bounds.Right - diameter;
-            path.AddArc(arc, 270, 90);
-            arc.Y = bounds.Bottom - diameter;
-            path.AddArc(arc, 0, 90);
-            arc.X = bounds.Left;
-            path.AddArc(arc, 90, 90);
-            path.CloseFigure();
-
-            return path;
         }
     }
 }

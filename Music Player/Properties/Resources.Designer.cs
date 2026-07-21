@@ -63,6 +63,16 @@ namespace Music_Player.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap _89fe68fbb93be7c0a4c703b730878789d14ae484 {
+            get {
+                object obj = ResourceManager.GetObject("89fe68fbb93be7c0a4c703b730878789d14ae484", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap empty {
             get {
                 object obj = ResourceManager.GetObject("empty", resourceCulture);
